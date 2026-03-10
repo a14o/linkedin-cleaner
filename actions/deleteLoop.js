@@ -1,41 +1,53 @@
+// actions/deleteLoop.js
 const { deletePost } = require("./deletePost");
-const { delay } = require("../utils/delay");
-const { randomBetween } = require("../utils/random");
 const settings = require("../config/settings");
+const { logDeleted, logError } = require("../utils/logger");
 
 async function runDeletionLoop(page) {
   let deleted = 0;
 
   while (deleted < settings.maxDeletes) {
+    try {
+      // Wait up to 10 seconds for a post to appear
+      const post = await page.waitForSelector('div.feed-shared-update-v2', { timeout: 10000 });
 
-    const post = await page.$('div.feed-shared-update-v2');
+      if (!post) {
+        console.log("No posts visible after waiting, stopping...");
+        break;
+      }
 
-    if (!post) {
-      console.log("No posts visible, scrolling...");
-      await page.mouse.wheel(0, 4000);
-      await delay(3000);
-      continue;
+      const success = await deletePost(page, post);
+
+      if (success) {
+        deleted++;
+        console.log(`Deleted post ${deleted}`);
+        logDeleted(`Deleted post ${deleted} at ${new Date().toISOString()}`);
+
+        // Refresh to get the next top post
+        await page.reload({ waitUntil: "domcontentloaded" });
+
+      } else {
+        console.log("Could not delete post, skipping...");
+        await page.reload({ waitUntil: "domcontentloaded" });
+      }
+
+    } catch (err) {
+      if (err.name === 'TimeoutError') {
+        console.log("No posts appeared after waiting, finishing loop.");
+        break;
+      } else {
+        console.log("Error during deletion loop:", err.message);
+        logError(err.message);
+        if (!page.isClosed()) {
+          await page.reload({ waitUntil: "domcontentloaded" });
+        } else {
+          break;
+        }
+      }
     }
-
-    const success = await deletePost(page, post);
-
-    if (success) {
-      deleted++;
-      console.log("Deleted post", deleted);
-      console.log("Refreshing page to get new posts...");
-      await page.reload({ waitUntil: "domcontentloaded" });
-      await delay(3000); 
-
-    } else {
-      console.log("Skipping post");
-      await page.mouse.wheel(0, 2000);
-      await delay(1000);
-    }
-
-    await delay(randomBetween(settings.minDelay, settings.maxDelay));
   }
 
-  console.log("Finished. Total deleted:", deleted);
+  console.log(`Finished. Total deleted: ${deleted}`);
 }
 
 module.exports = { runDeletionLoop };

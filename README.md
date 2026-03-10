@@ -18,13 +18,8 @@ linkedin-cleaner/
 │   ├── deletePost.js      # delete a single post
 │   └── deleteLoop.js      # iterate through posts
 │
-├── scraper/
-│   └── loadPosts.js       # scrolling + collecting post menus
-│
 ├── utils/
-│   ├── delay.js
 │   ├── logger.js
-│   └── random.js
 │
 ├── storage/
 │   └── linkedin-session.json
