@@ -83,7 +83,7 @@ The script will:
 
 - Deleting posts is permanent and cannot be undone.
 
-- 0Adjust `maxDeletes` carefully to avoid removing posts unintentionally.
+- Adjust `maxDeletes` carefully to avoid removing posts unintentionally.
 
 - LinkedIn UI changes may require updates to selectors in the script.
 
