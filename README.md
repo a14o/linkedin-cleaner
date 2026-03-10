@@ -89,6 +89,8 @@ The script will:
 
 This project is for educational and personal automation purposes. Use responsibly and ensure compliance with \*\*LinkedIn's terms of service.
 
+## File Structure
+
 ```
 linkedin-cleaner/
 │
