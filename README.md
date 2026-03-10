@@ -2,6 +2,10 @@
 
 Automate deleting LinkedIn posts or reposts using Playwright and JavaScript.
 
+## Demo
+
+![Bulk LinkedIn Posts Deletion Demo](assets/demo.gif)
+
 This script logs into LinkedIn, navigates to your activity page, deletes the most recent post, and refreshes the page. It repeats this process until the configured deletion limit is reached.
 
 This approach avoids DOM inconsistencies that occur when scrolling through the activity feed, which can cause posts to be skipped.
