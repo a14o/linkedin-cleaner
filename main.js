@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const { startBrowser } = require('./auth/login');
 const { runDeletionLoop } = require('./actions/deleteLoop');
 
