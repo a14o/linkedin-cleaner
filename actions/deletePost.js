@@ -1,4 +1,3 @@
-// actions/deletePost.js
 async function deletePost(page, post) {
   try {
     const menu = await post.waitForSelector(

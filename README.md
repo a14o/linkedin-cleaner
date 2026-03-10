@@ -4,9 +4,9 @@ Automate deleting LinkedIn posts or reposts using Playwright and JavaScript.
 
 ![Bulk LinkedIn Posts Deletion Demo](assets/demo.gif)
 
-This script logs into LinkedIn, navigates to your activity page, deletes the most recent post, and refreshes the page. It repeats this process until the configured deletion limit is reached.
+This script logs into LinkedIn, navigates to your activity page, deletes the most recent post, and refreshes the page. It repeats this process until the specified deletion limit is reached.
 
-This approach avoids DOM inconsistencies that occur when scrolling through the activity feed, which can cause posts to be skipped.
+This method prevents issues where posts get skipped due to dynamic feed rendering on LinkedIn.
 
 ## Features
 
@@ -14,9 +14,7 @@ This approach avoids DOM inconsistencies that occur when scrolling through the a
 
 - Deletes posts/reposts from your activity page
 
-- Configurable maximum deletion count
-
-- Simple configuration using environment variables
+- Simple terminal input for number of posts to delete
 
 ## Requirements
 
@@ -40,25 +38,6 @@ Install dependencies:
 npm install
 ```
 
-## Setup
-
-Create a `.env` file in the root directory.
-
-```
-LINKEDIN_ACTIVITY=https://www.linkedin.com/in/username/recent-activity/shares/
-```
-
-## Configuration
-
-Edit `settings.js` to control how many posts will be deleted.
-
-```
-module.exports = {
-  activityUrl: process.env.LINKEDIN_ACTIVITY,
-  maxDeletes: 200, // Modify this
-};
-```
-
 ## Usage
 
 Run the script:
@@ -69,27 +48,29 @@ node main.js
 
 The script will:
 
-1. Log in to LinkedIn
+1. Ask for the number of posts to be deleted
 
-2. Open your activity page
+2. Log in to LinkedIn
 
-3. Delete the first post
+3. Open your activity page
 
-4. Refresh the page
+4. Delete the first post
 
-5. Repeat until the limit is reached
+5. Refresh the page
+
+6. Repeat until the limit is reached
 
 ## Notes
 
 - Deleting posts is permanent and cannot be undone.
 
-- Adjust `maxDeletes` carefully to avoid removing posts unintentionally.
+- Make sure you enter the correct number of posts to delete.
 
 - LinkedIn UI changes may require updates to selectors in the script.
 
 ## Disclaimer
 
-This project is for educational and personal automation purposes. Use responsibly and ensure compliance with \*\*LinkedIn's terms of service.
+This project is for **educational and personal automation purposes.** Use responsibly and ensure compliance with **LinkedIn's terms of service**.
 
 ## File Structure
 
@@ -102,11 +83,8 @@ linkedin-cleaner/
 │
 ├── main.js                # Entry point
 │
-├── config/
-│   └── settings.js        # URLs, limits
-│
 ├── auth/
-│   └── login.js           # login / session handling
+│   └── login.js           # login and session handling
 │
 ├── actions/
 │   ├── navigate.js        # go to activity pages
@@ -114,7 +92,7 @@ linkedin-cleaner/
 │   └── deleteLoop.js      # iterate through posts
 │
 ├── utils/
-│   ├── logger.js
+│   ├── logger.js          # logging utility
 │
 ├── storage/
 │   └── linkedin-session.json

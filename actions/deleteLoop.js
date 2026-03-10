@@ -1,14 +1,11 @@
-// actions/deleteLoop.js
 const { deletePost } = require("./deletePost");
-const settings = require("../config/settings");
 const { logDeleted, logError } = require("../utils/logger");
 
-async function runDeletionLoop(page) {
+async function runDeletionLoop(page, maxDeletes) {
   let deleted = 0;
 
-  while (deleted < settings.maxDeletes) {
+  while (deleted < maxDeletes) {
     try {
-      // Wait up to 10 seconds for a post to appear
       const post = await page.waitForSelector('div.feed-shared-update-v2', { timeout: 10000 });
 
       if (!post) {
@@ -22,8 +19,6 @@ async function runDeletionLoop(page) {
         deleted++;
         console.log(`Deleted post ${deleted}`);
         logDeleted(`Deleted post ${deleted} at ${new Date().toISOString()}`);
-
-        // Refresh to get the next top post
         await page.reload({ waitUntil: "domcontentloaded" });
 
       } else {
