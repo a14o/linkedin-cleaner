@@ -1,32 +1,41 @@
-const { scrollFeed } = require('../scraper/loadPosts');
-const { deletePost } = require('./deletePost');
+const { deletePost } = require("./deletePost");
+const { delay } = require("../utils/delay");
+const { randomBetween } = require("../utils/random");
+const settings = require("../config/settings");
 
 async function runDeletionLoop(page) {
+  let deleted = 0;
 
-  while (true) {
+  while (deleted < settings.maxDeletes) {
 
-    await scrollFeed(page);
+    const post = await page.$('div.feed-shared-update-v2');
 
-    const menus = await page.$$('button[aria-label*="Control menu"]');
-
-    if (menus.length === 0) break;
-
-    for (const menu of menus) {
-
-      try {
-
-        await deletePost(page, menu);
-
-      } catch (err) {
-
-        console.log("Failed deletion");
-
-      }
-
+    if (!post) {
+      console.log("No posts visible, scrolling...");
+      await page.mouse.wheel(0, 4000);
+      await delay(3000);
+      continue;
     }
 
+    const success = await deletePost(page, post);
+
+    if (success) {
+      deleted++;
+      console.log("Deleted post", deleted);
+      console.log("Refreshing page to get new posts...");
+      await page.reload({ waitUntil: "domcontentloaded" });
+      await delay(3000); 
+
+    } else {
+      console.log("Skipping post");
+      await page.mouse.wheel(0, 2000);
+      await delay(1000);
+    }
+
+    await delay(randomBetween(settings.minDelay, settings.maxDelay));
   }
 
+  console.log("Finished. Total deleted:", deleted);
 }
 
 module.exports = { runDeletionLoop };
