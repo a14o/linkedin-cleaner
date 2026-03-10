@@ -8,7 +8,7 @@ linkedin-cleaner/
 ├── main.js                # Entry point
 │
 ├── config/
-│   └── settings.js        # limits, delays, URLs
+│   └── settings.js        # URLs, limits
 │
 ├── auth/
 │   └── login.js           # login / session handling
