@@ -2,9 +2,11 @@ const settings = require("../config/settings");
 
 async function goToActivity(page) {
 
-  await page.goto(settings.activityUrl);
+  console.log("Opening activity page...");
 
-  await page.waitForLoadState("networkidle");
+  await page.goto(settings.activityUrl, {
+    waitUntil: "domcontentloaded"
+  });
 
 }
 

@@ -43,6 +43,8 @@ async function startBrowser() {
     console.log("Session saved!");
   }
 
+  await page.goto("https://www.linkedin.com/feed");
+
   return { browser, page, context };
 }
 
