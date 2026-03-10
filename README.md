@@ -32,7 +32,7 @@ Clone the repo:
 https://github.com/a14o/linkedin-cleaner.git
 ```
 
-Install dependencies
+Install dependencies:
 
 ```
 npm install
