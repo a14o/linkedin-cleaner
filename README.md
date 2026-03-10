@@ -1,3 +1,4 @@
+```
 linkedin-cleaner/
 │
 ├── package.json
@@ -31,3 +32,4 @@ linkedin-cleaner/
 └── logs/
     ├── deleted.log
     └── errors.log
+```
