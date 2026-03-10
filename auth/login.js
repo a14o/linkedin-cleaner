@@ -1,5 +1,20 @@
 const { chromium } = require("playwright");
 const fs = require("fs");
+const readline = require("readline");
+
+function waitForEnter() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  return new Promise(resolve => {
+    rl.question("Login to LinkedIn, then press ENTER.\n", () => {
+      rl.close();
+      resolve();
+    });
+  });
+}
 
 async function startBrowser() {
 
@@ -32,9 +47,7 @@ async function startBrowser() {
 
   if (!fs.existsSync("storage/linkedin-session.json")) {
 
-    console.log("Login to LinkedIn, then press ENTER.");
-
-    await new Promise(resolve => process.stdin.once("data", resolve));
+    await waitForEnter();
 
     await context.storageState({
       path: "storage/linkedin-session.json"
